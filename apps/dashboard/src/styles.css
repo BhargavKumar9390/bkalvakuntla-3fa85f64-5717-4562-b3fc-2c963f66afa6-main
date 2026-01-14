@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Material theme after Tailwind so Material styles take precedence where needed */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Small overrides to harmonize Tailwind and Angular Material */
+/* Make material form fields expand to their container and avoid Tailwind margin/padding conflicts */
+.mat-form-field {
+	width: 100%;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+	box-sizing: border-box;
+}
+
+/* Ensure mat-error color shows clearly with Tailwind */
+.mat-error {
+	color: #c62828; /* slightly stronger red */
+}
+
+/* Align spinner inside buttons */
+.mat-progress-spinner {
+	vertical-align: middle;
+	margin-right: 8px;
+}
+
+/* Global base styles for the dashboard app */
+html, body {
+	height: 100%;
+}
+body {
+	@apply bg-gray-50 text-gray-800 font-sans;
+}
+
+/* Smooth color transitions for theme toggling */
+html, body, .max-w-6xl, .max-w-3xl {
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Dark theme base overrides (Tailwind 'dark' class via document.documentElement) */
+.dark body {
+	@apply bg-gray-900 text-gray-100;
+}
+
+/* You can add additional global styles below */
+
+/* Toast/snackbar styles used by ToastService */
+.toast-success {
+	background: #16a34a !important; /* green */
+	color: white !important;
+}
+.toast-error {
+	background: #dc2626 !important; /* red */
+	color: white !important;
+}
+.toast-info {
+	background: #2563eb !important; /* blue */
+	color: white !important;
+}

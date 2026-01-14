@@ -1,0 +1,111 @@
+<div class="task-card-wrapper">
+  <div
+    class="task-card"
+    [class.completed]="task?.completed"
+    [ngClass]="{
+      'priority-high': task?.priority === 'High',
+      'priority-medium': task?.priority === 'Medium',
+      'priority-low': task?.priority === 'Low'
+    }"
+  >
+    <!-- Header -->
+    <div class="task-card-header">
+      <div class="task-title-section">
+        <h3 class="task-title" [class.completed]="task?.completed">
+          {{ task?.title }}
+        </h3>
+
+        <span *ngIf="task?.completed" class="completed-badge">
+          <svg
+            class="check-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Completed
+        </span>
+      </div>
+
+      <!-- Menu -->
+      <div class="action-menu">
+        <button class="menu-button" (click)="toggleMenu($event)" type="button">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="5" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="12" cy="19" r="2" />
+          </svg>
+        </button>
+
+        <div class="menu-dropdown" *ngIf="menuOpen">
+          <button class="menu-item" (click)="handleToggleComplete()">
+            ✓ {{ task?.completed ? 'Mark Incomplete' : 'Mark Complete' }}
+          </button>
+          <button class="menu-item" (click)="handleEdit()">✎ Edit Task</button>
+          <button
+            *ngIf="auth.user && auth.user.sub === task?.ownerId"
+            class="menu-item danger"
+            (click)="handleDelete()"
+          >
+            🗑 Delete
+          </button>
+        </div>
+
+        <!-- Floating inline confirmation overlay positioned over the card -->
+        <div class="delete-confirm-overlay" *ngIf="confirmingDelete">
+          <div class="overlay-card">
+            <div class="overlay-text">Delete "{{ task?.title }}"?</div>
+            <div class="overlay-actions">
+              <button class="confirm-delete" (click)="confirmDelete()">
+                Delete
+              </button>
+              <button class="cancel-delete" (click)="cancelDelete()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <p class="subtitle">{{ task?.description }}</p>
+
+    <div class="task-footer">
+      <div class="meta-row">
+        <span class="badge category">
+          {{ task?.category || 'GENERAL' }}
+        </span>
+
+        <span class="badge status-badge" [ngClass]="statusClass(task?.status)">
+          {{ task?.status || 'TODO' }}
+        </span>
+
+        <span class="metadata-item">
+          <svg
+            class="metadata-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="16" rx="2" ry="2"></rect>
+            <line x1="16" y1="3" x2="16" y2="7"></line>
+            <line x1="8" y1="3" x2="8" y2="7"></line>
+          </svg>
+          {{ task?.dueDate ? (task?.dueDate | date : 'MMM d, yyyy') : '-' }}
+        </span>
+      </div>
+
+      <span class="priority-pill">
+        {{ task?.priority || 'Medium' }}
+      </span>
+    </div>
+  </div>
+</div>

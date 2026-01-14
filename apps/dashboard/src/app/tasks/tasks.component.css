@@ -1,0 +1,638 @@
+/* ===============================
+   Tasks Page Layout
+   =============================== */
+.tasks-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 24px;
+}
+
+.tasks-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   Header
+   =============================== */
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0;
+}
+
+/* ===============================
+   Loading Overlay
+   =============================== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
+}
+
+/* ===============================
+   Filters Section
+   =============================== */
+.filters-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+/* ===============================
+   FIGMA STYLE SEARCH BAR
+   =============================== */
+.search-field {
+  width: 100%;
+}
+
+.search-icon {
+  color: #9ca3af;
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Position the prefix icon properly */
+.search-field ::ng-deep .mat-mdc-form-field-icon-prefix {
+  padding-left: 12px;
+}
+
+.search-field ::ng-deep .mat-mdc-form-field-icon-prefix > .mat-icon {
+  padding: 0;
+}
+
+/* Remove Angular Material outline */
+.search-field ::ng-deep .mdc-notched-outline {
+  display: none;
+}
+
+/* Search container */
+.search-field ::ng-deep .mat-mdc-text-field-wrapper {
+  background: #f3f4f6;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.search-field ::ng-deep .mat-mdc-text-field-wrapper:hover {
+  background: #eef2f7;
+}
+
+.search-field ::ng-deep .mat-mdc-text-field-wrapper:focus-within {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Remove helper text */
+.search-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Input */
+.search-field ::ng-deep input {
+  padding: 1px 1px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #111827;
+  background: transparent;
+}
+
+.search-field ::ng-deep input::placeholder {
+  color: #9ca3af;
+}
+
+/* ===============================
+   Status Dropdown (Match Search)
+   =============================== */
+.status-field {
+  min-width: 200px;
+}
+
+.status-field ::ng-deep .mdc-notched-outline {
+  display: none;
+}
+
+.status-field ::ng-deep .mat-mdc-text-field-wrapper {
+  background: #f3f4f6;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.status-field ::ng-deep .mat-mdc-text-field-wrapper:focus-within {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.status-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.status-field ::ng-deep .mat-mdc-select {
+  padding: 1px 1px;
+  font-size: 14px;
+}
+
+/* Material form-fields used for other filters should match the status-field appearance */
+.mat-filter-field {
+  min-width: 140px;
+}
+
+.mat-filter-field.short {
+  min-width: 150px;
+  max-width: 220px;
+}
+
+.mat-filter-field ::ng-deep .mdc-notched-outline {
+  display: none;
+}
+
+.mat-filter-field ::ng-deep .mat-mdc-text-field-wrapper {
+  background: #f3f4f6;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+/* Match status-field inner sizing so values sit inside the outlined box */
+.mat-filter-field ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0 12px;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.mat-filter-field ::ng-deep .mat-mdc-text-field-wrapper:focus-within {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.mat-filter-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.mat-filter-field ::ng-deep .mat-mdc-select {
+  padding: 1px 6px;
+  font-size: 14px;
+}
+
+.mat-filter-field ::ng-deep .mat-mdc-select-value {
+  line-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* ===============================
+   Controls Row
+   =============================== */
+.controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  /* keep the controls grouped to a sensible width so spacing feels even */
+  max-width: 720px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* make label and select align consistently */
+  white-space: nowrap;
+}
+
+/* Normalize select widths so Category / Sort / Order appear evenly spaced */
+.filter-group .filter-select {
+  min-width: 140px;
+}
+
+.filter-group .sort-order {
+  min-width: 140px;
+}
+
+/* Ensure labels don't shift vertically */
+.filter-label {
+  min-width: 48px;
+  display: inline-block;
+}
+
+/* Make native selects compact and visually consistent */
+.filter-group select.filter-select {
+  width: auto;
+  min-width: 110px;
+  max-width: 180px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+}
+
+/* Mat select inside filter-controls (status) should be a bit wider */
+.filter-controls ::ng-deep .mat-mdc-select {
+  min-width: 160px;
+  max-width: 260px;
+}
+
+/* Reduce label spacing so values like "All" don't leave large empty space */
+.filter-group .filter-label-text,
+.filter-group .filter-label {
+  margin-right: 6px;
+}
+
+/* Ensure the Sort + Order group stays compact */
+.filter-group.sort {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-label.order-by {
+  min-width: 56px;
+  font-size: 13px;
+  color: #4a5568;
+  text-align: right;
+}
+
+/* make the order dropdown compact */
+.filter-select.sort-order {
+  min-width: 120px;
+  max-width: 140px;
+}
+
+.filter-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  white-space: nowrap;
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.create-button {
+  padding: 12px 32px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  height: 48px !important;
+  min-width: 160px;
+  letter-spacing: 0.5px;
+}
+
+.create-button:disabled {
+  opacity: 0.6;
+}
+
+/* ===============================
+   FILTER ROW ALIGNMENT FIX
+   =============================== */
+
+.filters-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Row below search bar */
+.controls-row {
+  display: flex;
+  align-items: center; /* KEY FIX */
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Left side filters */
+.filter-controls {
+  display: flex;
+  align-items: center; /* KEY FIX */
+  gap: 24px;
+}
+
+/* Each filter group */
+.filter-group {
+  display: flex;
+  align-items: center; /* KEY FIX */
+  gap: 8px;
+}
+
+/* Normalize dropdown/input height */
+.filter-controls select,
+.filter-controls mat-select,
+.filter-controls input {
+  height: 40px;
+}
+
+/* Create button alignment */
+.create-button {
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+}
+
+.right-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.clear-filters-main {
+  height: 40px;
+  padding: 8px 12px;
+  color: #374151;
+  border-color: #e5e7eb;
+  background: #ffffff;
+}
+
+.clear-filters-main:hover {
+  background: #f3f4f6;
+}
+
+/* Override: make left filter controls compact and inline so labels and selects sit together */
+.controls-row .filter-controls {
+  display: inline-flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+  max-width: none !important;
+}
+
+.controls-row .filter-group.sort {
+  display: inline-flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.controls-row .filter-group .filter-select {
+  min-width: 100px !important;
+  width: auto !important;
+}
+
+.controls-row .filter-label {
+  min-width: 36px !important;
+}
+
+/* Add gap specifically after the Sort dropdown so Order by is visually separated */
+.controls-row .filter-group.sort select.filter-select:first-of-type {
+  margin-right: 14px !important;
+}
+
+/* ===============================
+   Tasks List
+   =============================== */
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+
+.task-item {
+  margin-bottom: 16px;
+  display: block;
+}
+
+.task-content {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.drag-handle {
+  padding: 8px;
+  cursor: grab;
+  color: #9ca3af;
+  font-size: 12px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+app-task-card {
+  flex: 1;
+  min-width: 0;
+  display: block;
+}
+
+/* ===============================
+   Responsive
+   =============================== */
+@media (max-width: 768px) {
+  .tasks-page {
+    padding: 16px;
+  }
+
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .status-field {
+    min-width: 100%;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .create-button {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   TASK CARD – FIGMA STYLE (ONLY ADDITION)
+   ===================================================== */
+
+app-task-card .task-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-left: 5px solid transparent;
+  padding: 16px 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+/* Keyboard selection highlight */
+.task-item.selected app-task-card .task-card {
+  border-color: #60a5fa; /* blue-400 */
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.35);
+}
+
+/* Page header layout + help icon */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.help-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b7280; /* gray-500 */
+}
+
+.help-button mat-icon {
+  font-size: 22px;
+}
+
+/* Shortcuts Help Panel */
+.shortcuts-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.shortcuts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.shortcuts-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #111827; /* gray-900 */
+}
+
+.close-help {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.shortcuts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px 16px;
+}
+
+.shortcuts-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  background: #f9fafb; /* gray-50 */
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 6px;
+  padding: 2px 6px;
+  color: #374151; /* gray-700 */
+}
+
+.action {
+  color: #4b5563; /* gray-600 */
+}
+
+app-task-card .task-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Priority left bar */
+app-task-card .task-card.priority-high {
+  border-left-color: #ef4444;
+}
+
+app-task-card .task-card.priority-medium {
+  border-left-color: #f59e0b;
+}
+
+app-task-card .task-card.priority-low {
+  border-left-color: #22c55e;
+}
+
+/* Title */
+app-task-card .task-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Description */
+app-task-card .subtitle {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 8px 0 12px;
+}
+
+/* Metadata */
+app-task-card .meta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Category badge */
+app-task-card .badge.category {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+/* Priority pill */
+app-task-card .priority-pill {
+  background: #f3f4f6;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* Completed state */
+app-task-card .task-card.completed {
+  opacity: 0.75;
+}

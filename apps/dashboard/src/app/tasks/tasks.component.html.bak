@@ -1,0 +1,277 @@
+<div class="tasks-page">
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-progress-spinner
+      diameter="60"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+
+  <div class="tasks-container">
+    <div class="page-header">
+      <h2 class="page-title">Tasks</h2>
+    </div>
+
+    <!-- Statistics and Charts Section -->
+    <div class="statistics-section" *ngIf="!isLoading && tasks.length > 0">
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-value">{{ taskStats.total }}</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-card stat-todo">
+          <div class="stat-value">{{ taskStats.todo }}</div>
+          <div class="stat-label">To Do</div>
+        </div>
+        <div class="stat-card stat-progress">
+          <div class="stat-value">{{ taskStats.inProgress }}</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card stat-done">
+          <div class="stat-value">{{ taskStats.done }}</div>
+          <div class="stat-label">Done</div>
+        </div>
+      </div>
+
+      <div class="charts-container">
+        <div class="chart-wrapper">
+          <h3 class="chart-title">Tasks by Status</h3>
+          <div class="chart-content">
+            <canvas baseChart
+              [data]="statusChartData"
+              [options]="chartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <h3 class="chart-title">Tasks by Category</h3>
+          <div class="chart-content">
+            <canvas baseChart
+              [data]="categoryChartData"
+              [options]="chartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters and Search Section -->
+    <div class="filters-section">
+      <div class="search-row">
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-icon matPrefix class="search-icon">search</mat-icon>
+          <input
+            #searchInput
+            matInput
+            [(ngModel)]="newTitle"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search tasks... (press / or S)"
+            autocomplete="off"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="status-field">
+          <mat-select
+            [(ngModel)]="filterStatus"
+            (selectionChange)="load()"
+            placeholder="All Status"
+          >
+            <mat-option value="">All Status</mat-option>
+            <mat-option value="TODO">To Do</mat-option>
+            <mat-option value="IN_PROGRESS">In Progress</mat-option>
+            <mat-option value="DONE">Done</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="controls-row">
+        <div class="filter-controls">
+          <div class="filter-group">
+            <label class="filter-label">Category:</label>
+            <select
+              [(ngModel)]="filterCategory"
+              (change)="load()"
+              class="filter-select"
+            >
+              <option value="">All</option>
+              <option value="WORK">Work</option>
+              <option value="PERSONAL">Personal</option>
+              <option value="URGENT">Urgent</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Sort:</label>
+            <select
+              [(ngModel)]="sortField"
+              (change)="load()"
+              class="filter-select"
+            >
+              <option value="dueDate">Due Date</option>
+              <option value="priority">Priority</option>
+              <option value="title">Title</option>
+            </select>
+            <select
+              [(ngModel)]="sortOrder"
+              (change)="load()"
+              class="filter-select sort-order"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <button
+            *hasPermission="'CREATE_TASK'"
+            mat-flat-button
+            color="primary"
+            (click)="create()"
+            [disabled]="isLoading"
+            class="create-button"
+          >
+            Create Task
+          </button>
+          <div
+            *ngIf="!auth.hasPermission('CREATE_TASK')"
+            class="permission-hint"
+            title="You need CREATE_TASK permission to create new tasks"
+          >
+            <svg
+              class="w-4 h-4 text-gray-400 inline mr-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m0 0v2m0-2h2m-2 0H10m-7-7a9 9 0 1118 0 9 9 0 01-18 0z"
+              />
+            </svg>
+            <span class="text-xs text-gray-500">View-only mode</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filters -->
+      <div *ngIf="hasActiveFilters" class="active-filters">
+        <span class="filter-label-text">Active filters:</span>
+        <span *ngIf="filterStatus" class="filter-chip"
+          >Status: {{ filterStatus }}</span
+        >
+        <span *ngIf="filterCategory" class="filter-chip"
+          >Category: {{ filterCategory }}</span
+        >
+        <span *ngIf="newTitle" class="filter-chip"
+          >Search: "{{ newTitle }}"</span
+        >
+        <button mat-button class="clear-filters-btn" (click)="clearFilters()">
+          Clear all
+        </button>
+      </div>
+    </div>
+
+    <!-- Tasks List -->
+    <ng-container *ngIf="!isLoading">
+      <div *ngIf="tasks.length === 0" class="empty-state">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="empty-icon"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 12h6m-3-3v6m2 6H7a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v7a2 2 0 01-2 2z"
+          />
+        </svg>
+        <ng-container *ngIf="hasActiveFilters; else noTasks">
+          <h3 class="empty-title">No results found</h3>
+          <p class="empty-description">
+            No tasks match your current filters. Try adjusting your search
+            criteria.
+          </p>
+          <button
+            mat-stroked-button
+            (click)="clearFilters()"
+            class="action-button"
+          >
+            Clear Filters
+          </button>
+        </ng-container>
+        <ng-template #noTasks>
+          <h3 class="empty-title">No tasks yet</h3>
+          <p class="empty-description">
+            Get started by creating your first task to stay organized.
+          </p>
+          <div class="empty-actions">
+            <button
+              *hasPermission="'CREATE_TASK'"
+              mat-flat-button
+              color="primary"
+              (click)="create()"
+              class="create-button"
+            >
+              Create Task
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <ul *ngIf="tasks.length > 0" id="task-list" class="tasks-list">
+        <li
+          *ngFor="let t of tasks; let i = index"
+          class="task-item"
+          [class.drop-target]="hoverIndex === i"
+          [attr.draggable]="auth.hasPermission('UPDATE_TASK') ? 'true' : null"
+          (dragstart)="
+            auth.hasPermission('UPDATE_TASK') && onDragStart($event, i)
+          "
+          (dragenter)="
+            auth.hasPermission('UPDATE_TASK') && onDragEnter($event, i)
+          "
+          (dragleave)="
+            auth.hasPermission('UPDATE_TASK') && onDragLeave($event, i)
+          "
+          (dragover)="
+            auth.hasPermission('UPDATE_TASK') && onDragOver($event, i)
+          "
+          (drop)="auth.hasPermission('UPDATE_TASK') && onDrop($event, i)"
+        >
+          <div class="task-content">
+            <div class="drag-handle" title="Drag to reorder" aria-hidden="true">
+              ⋮⋮
+            </div>
+            <app-task-card
+              [task]="t"
+              (edit)="edit($event)"
+              (delete)="remove($event)"
+              (toggleComplete)="onToggleComplete($event)"
+            ></app-task-card>
+          </div>
+          <div
+            *ngIf="hoverIndex === i"
+            class="drop-indicator"
+            aria-hidden="true"
+          ></div>
+        </li>
+      </ul>
+
+      <app-task-modal
+        *ngIf="showModal"
+        [initial]="editing"
+        [saving]="saving"
+        (saved)="onModalSave($event)"
+        (closed)="onModalClose()"
+      ></app-task-modal>
+    </ng-container>
+  </div>
+</div>

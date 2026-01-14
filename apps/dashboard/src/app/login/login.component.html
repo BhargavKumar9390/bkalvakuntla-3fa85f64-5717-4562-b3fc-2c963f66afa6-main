@@ -1,0 +1,95 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- Icon -->
+    <div class="icon-container">
+      <div class="icon-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 11l3 3L22 4"></path>
+          <path
+            d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h1 class="title">Task Management System</h1>
+    <p class="subtitle">
+      Sign in to access your tasks with role-based access control
+    </p>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-input"
+          formControlName="email"
+          placeholder="user@company.com"
+          autocomplete="email"
+        />
+        <div
+          class="error-message"
+          *ngIf="
+            form.get('email')?.touched &&
+            form.get('email')?.hasError('required')
+          "
+        >
+          Email is required
+        </div>
+        <div
+          class="error-message"
+          *ngIf="
+            form.get('email')?.touched && form.get('email')?.hasError('email')
+          "
+        >
+          Enter a valid email
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-input"
+          formControlName="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        />
+        <div
+          class="error-message"
+          *ngIf="
+            form.get('password')?.touched &&
+            form.get('password')?.hasError('required')
+          "
+        >
+          Password is required
+        </div>
+      </div>
+
+      <button type="submit" class="signin-button" [disabled]="loading">
+        <mat-progress-spinner
+          *ngIf="loading"
+          diameter="20"
+          mode="indeterminate"
+          class="spinner"
+        ></mat-progress-spinner>
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Signing in...</span>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+    </form>
+  </div>
+</div>

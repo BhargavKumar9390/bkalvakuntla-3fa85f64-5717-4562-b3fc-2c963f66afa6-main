@@ -1,0 +1,109 @@
+<div
+  class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+    <h3 class="text-xl font-semibold mb-4">{{ initialTitle }}</h3>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <label class="block text-sm font-medium text-gray-700">Title</label>
+      <input formControlName="title" class="w-full p-2 border rounded mb-3" />
+      <div
+        *ngIf="form.get('title')?.touched && form.get('title')?.invalid"
+        class="text-xs text-red-600 mb-2"
+      >
+        Title is required.
+      </div>
+
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <textarea
+        formControlName="description"
+        class="w-full p-2 border rounded mb-3"
+      ></textarea>
+
+      <label class="block text-sm font-medium text-gray-700">Status</label>
+      <select formControlName="status" class="w-full p-2 border rounded mb-3">
+        <option value="TODO">TODO</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+      </select>
+
+      <label class="block text-sm font-medium text-gray-700">Priority</label>
+      <select formControlName="priority" class="w-full p-2 border rounded mb-3">
+        <option value="" disabled selected>Select Priority</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <div
+        *ngIf="form.get('priority')?.touched && form.get('priority')?.invalid"
+        class="text-xs text-red-600 mb-2"
+      >
+        Priority is required.
+      </div>
+
+      <label class="block text-sm font-medium text-gray-700">Due date</label>
+      <input
+        type="date"
+        formControlName="dueDate"
+        class="w-full p-2 border rounded mb-3"
+      />
+      <div
+        *ngIf="form.get('dueDate')?.errors?.['past']"
+        class="text-xs text-red-600 mb-2"
+      >
+        Due date cannot be in the past.
+      </div>
+
+      <label class="block text-sm font-medium text-gray-700">Category</label>
+      <select formControlName="category" class="w-full p-2 border rounded mb-3">
+        <option value="WORK">Work</option>
+        <option value="PERSONAL">Personal</option>
+        <option value="URGENT">Urgent</option>
+        <option value="OTHER">Other</option>
+      </select>
+
+      <label class="block text-sm font-medium text-gray-700"
+        >Organization (optional)</label
+      >
+      <select
+        formControlName="organizationId"
+        class="w-full p-2 border rounded mb-4"
+      >
+        <option value="">-- Use default organization --</option>
+        <option *ngFor="let org of availableOrgs" [value]="org.id">
+          {{ org.name }}
+        </option>
+      </select>
+      <div class="text-xs text-gray-500 mb-3" *ngIf="loadingOrgs">
+        Loading organizations...
+      </div>
+      <div
+        class="text-xs text-gray-500 mb-3"
+        *ngIf="!loadingOrgs && availableOrgs.length > 1"
+      >
+        OWNER/ADMIN can create tasks in child organizations.
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          class="px-4 py-2 border rounded"
+          (click)="cancel()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
+          [disabled]="form.invalid || saving"
+        >
+          <mat-progress-spinner
+            *ngIf="saving"
+            diameter="18"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+          <span>{{ saving ? 'Saving...' : 'Save' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
