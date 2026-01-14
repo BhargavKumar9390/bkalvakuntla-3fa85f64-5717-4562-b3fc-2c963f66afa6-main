@@ -129,6 +129,15 @@ export class TaskModalComponent implements OnChanges, OnInit {
   }
 
   save() {
+    // mark all controls touched so validation messages appear
+    this.form.markAllAsTouched();
+
+    // normalize/trim title to avoid whitespace-only values
+    const titleCtrl = this.form.get('title');
+    if (titleCtrl && typeof titleCtrl.value === 'string') {
+      titleCtrl.setValue(titleCtrl.value.trim());
+    }
+
     // dueDate validation: not allowed to be in the past
     const dd = this.form.get('dueDate')?.value;
     if (dd) {
@@ -142,6 +151,7 @@ export class TaskModalComponent implements OnChanges, OnInit {
     }
 
     if (this.form.invalid) return;
+
     const val = { ...this.initial, ...this.form.value };
     this.saved.emit(val);
   }

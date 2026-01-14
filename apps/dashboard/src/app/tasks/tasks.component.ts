@@ -270,8 +270,13 @@ export class TasksComponent implements OnInit, OnDestroy {
       p.dueDate = null;
     }
 
-    // Add organizationId from user token for new tasks
-    if (!p.id && this.auth.user && this.auth.user.organizationId) {
+    // Add organizationId from user token for new tasks only when not provided
+    if (
+      !p.id &&
+      this.auth.user &&
+      this.auth.user.organizationId &&
+      !p.organizationId
+    ) {
       p.organizationId = this.auth.user.organizationId;
     }
 

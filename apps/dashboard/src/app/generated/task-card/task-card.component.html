@@ -47,7 +47,7 @@
           <button class="menu-item" (click)="handleToggleComplete()">
             ✓ {{ task?.completed ? 'Mark Incomplete' : 'Mark Complete' }}
           </button>
-          <button class="menu-item" (click)="handleEdit()">✎ Edit Task</button>
+          <button *hasPermission="'UPDATE_TASK'" class="menu-item" (click)="handleEdit()">✎ Edit Task</button>
           <button
             *ngIf="auth.user && auth.user.sub === task?.ownerId"
             class="menu-item danger"
